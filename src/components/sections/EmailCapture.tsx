@@ -31,12 +31,12 @@ export function EmailCapture() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
-              className="flex-1 h-12 md:h-14 px-4 rounded-l-md rounded-r-md sm:rounded-r-none bg-white text-primary font-body text-base tracking-tight placeholder:text-muted"
+              className="flex-1 min-h-[48px] h-12 md:h-14 px-4 rounded-l-md rounded-r-md sm:rounded-r-none bg-white text-primary font-body text-base tracking-tight placeholder:text-muted"
               aria-label="Email address"
             />
             <button
               type="submit"
-              className="h-12 md:h-14 px-8 bg-accent text-white font-body text-base rounded-md sm:rounded-l-none sm:rounded-r-md tracking-tight hover:opacity-90 transition-opacity"
+              className="shrink-0 min-h-[48px] h-12 md:h-14 px-8 bg-accent text-white font-body text-base rounded-md sm:rounded-l-none sm:rounded-r-md tracking-tight hover:opacity-90 transition-opacity"
             >
               Subscribe
             </button>

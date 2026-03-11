@@ -1,16 +1,16 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { StarRating } from "./StarRating";
 import { Badge } from "./Badge";
 import { trackEvent } from "@/lib/analytics";
+import { useCart } from "@/lib/context/CartContext";
 import type { Product } from "@/lib/types";
 
-interface ProductCardProps extends Product {
-  onAddToCart?: (product: Product) => void;
-}
+interface ProductCardProps extends Product {}
 
 export function ProductCard({
   id,
@@ -24,13 +24,23 @@ export function ProductCard({
   badge,
   category,
   categories,
-  onAddToCart,
 }: ProductCardProps) {
+  const { addItem } = useCart();
+  const [added, setAdded] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const product: Product = { id, slug, name, description, price, rating, reviewCount, image, badge, category, categories };
+    addItem(product);
     trackEvent("add_to_cart", { product_id: id, name, price });
-    onAddToCart?.({ id, slug, name, description, price, rating, reviewCount, image, badge, category, categories });
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setAdded(true);
+    timeoutRef.current = setTimeout(() => {
+      setAdded(false);
+      timeoutRef.current = null;
+    }, 1500);
   };
 
   return (
@@ -77,9 +87,11 @@ export function ProductCard({
         <button
           type="button"
           onClick={handleAddToCart}
-          className="w-full bg-primary text-white font-body text-base h-12 rounded-md tracking-tight hover:opacity-90 transition-opacity min-h-[48px]"
+          className={`w-full font-body text-base h-12 rounded-md tracking-tight transition-opacity min-h-[48px] ${
+            added ? "bg-accent text-white" : "bg-primary text-white hover:opacity-90"
+          }`}
         >
-          Add to Cart
+          {added ? "Added! ✓" : "Add to Cart"}
         </button>
       </div>
     </article>

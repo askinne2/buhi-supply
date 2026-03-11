@@ -6,9 +6,11 @@ import Image from "next/image";
 import { Search, ShoppingCart, Menu, X } from "lucide-react";
 import { LOGO_IMAGE } from "@/lib/figma-assets";
 import { HEADER_NAV_LINKS } from "@/lib/categories";
+import { useCart } from "@/lib/context/CartContext";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { itemCount } = useCart();
 
   return (
     <header className="sticky top-0 z-50 h-[72px] md:h-20 bg-white border-b border-gray-200">
@@ -57,12 +59,14 @@ export function Header() {
           <button type="button" aria-label="Search" className="p-2">
             <Search className="w-5 h-5 text-muted" />
           </button>
-          <button type="button" aria-label="Cart" className="relative p-2">
+          <Link href="/cart" aria-label="Cart" className="relative p-2">
             <ShoppingCart className="w-5 h-5 text-muted" />
-            <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary text-white text-xs font-body flex items-center justify-center">
-              0
-            </span>
-          </button>
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-accent text-white text-xs font-body flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </Link>
           <Link
             href="/shop"
             className="hidden md:inline-flex items-center justify-center bg-primary text-white font-body text-base rounded-md h-12 px-6 tracking-tight hover:opacity-90 transition-opacity"

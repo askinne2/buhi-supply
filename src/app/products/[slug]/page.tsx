@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -14,6 +14,7 @@ import {
 import { ProductCard } from "@/components/ui/ProductCard";
 import { StarRating } from "@/components/ui/StarRating";
 import { trackEvent } from "@/lib/analytics";
+import { useCart } from "@/lib/context/CartContext";
 import { PRODUCTS } from "@/lib/data/products";
 import type { Product } from "@/lib/types";
 
@@ -46,8 +47,11 @@ export default function ProductDetailPage() {
   const params = useParams();
   const slug = typeof params.slug === "string" ? params.slug : "";
   const product = getProductBySlug(slug);
+  const { addItem } = useCart();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const related = product ? getRelatedProducts(product, 3) : [];
 
@@ -63,12 +67,19 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = useCallback(() => {
     if (!product) return;
+    addItem(product, quantity);
     trackEvent("add_to_cart", {
       product_id: product.id,
       name: product.name,
       price: product.price,
     });
-  }, [product]);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setAdded(true);
+    timeoutRef.current = setTimeout(() => {
+      setAdded(false);
+      timeoutRef.current = null;
+    }, 1500);
+  }, [product, quantity, addItem]);
 
   if (!product) {
     return (
@@ -202,9 +213,11 @@ export default function ProductDetailPage() {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="mt-6 w-full bg-primary text-white font-body text-base h-14 rounded-md tracking-tight hover:opacity-90 transition-opacity min-h-[48px] md:h-14"
+                className={`mt-6 w-full font-body text-base h-14 rounded-md tracking-tight transition-opacity min-h-[48px] md:h-14 ${
+                  added ? "bg-accent text-white" : "bg-primary text-white hover:opacity-90"
+                }`}
               >
-                Add to Cart
+                {added ? "Added! ✓" : "Add to Cart"}
               </button>
               <button
                 type="button"

@@ -18,7 +18,9 @@ export type AnalyticsEvent =
   | "quiz_start"
   | "quiz_complete"
   | "lifestyle_category_click"
-  | "contact_form_submit";
+  | "contact_form_submit"
+  | "checkout_start"
+  | "purchase";
 
 export type EventParams = {
   product_id?: string;
@@ -27,6 +29,8 @@ export type EventParams = {
   source?: string;
   category?: string;
   result_product_id?: string;
+  value?: number;
+  item_count?: number;
 };
 
 export function trackEvent(

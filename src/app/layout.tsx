@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Open_Sans, Average_Sans } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { CartProvider } from "@/components/providers/CartProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -36,9 +38,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${openSans.variable} ${averageSans.variable}`}>
       <body className="min-h-screen bg-background">
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </CartProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

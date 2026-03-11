@@ -364,3 +364,23 @@ If the Figma MCP is connected in Cursor, you can call it with:
 - Always match the Figma design — if unsure, ask for the node ID and pull the spec
 - Always keep components under ~150 lines — split into sub-components if larger
 - Always export a `metadata` object from each page file
+
+---
+
+## CART SYSTEM
+
+CartContext is at `src/lib/context/CartContext.tsx`.
+- All components needing cart state MUST use `useCart()` hook
+- Never manage cart state locally in a component
+- Never call localStorage directly for cart — always go through CartContext
+- CartProvider wraps the entire app in layout.tsx
+
+Cart flow: ProductCard/ProductDetail → addItem() → /cart → /checkout → /order-confirmation
+
+## CHECKOUT
+
+Checkout is demo only — no Stripe, no API routes, no payments.
+Simulation: card number ending in even digit = success, odd = failure.
+On success: clearCart() then router.push('/order-confirmation').
+On failure: show inline error, stay on /checkout page.
+Never add real payment processing without explicit instruction.
