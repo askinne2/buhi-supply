@@ -1,0 +1,366 @@
+# Buhi Supply Co — Cursor Rules
+# Drop this file in the root of your Next.js project.
+# Claude will read this at the start of every session to stay consistent.
+
+## PROJECT IDENTITY
+
+This is the Buhi Supply Co e-commerce website.
+Brand: lifestyle bag brand targeting millennial female professionals and students.
+Stack: Next.js 14 (App Router), TypeScript, Tailwind CSS.
+Goal: production-ready, SEO-optimized, mobile-first e-commerce site.
+
+---
+
+## TECH STACK
+
+- Framework: Next.js 14 with App Router (`src/app/`)
+- Language: TypeScript (strict mode)
+- Styling: Tailwind CSS with custom design tokens (see below)
+- Fonts: Google Fonts via `next/font/google` — Open Sans (headings), Average Sans (body)
+- Icons: `lucide-react`
+- Images: `next/image` for all images (never plain `<img>` tags)
+- Analytics: Google Tag Manager + GA4, Meta Pixel, TikTok Pixel
+
+---
+
+## FOLDER STRUCTURE
+
+Always follow this structure. Do not deviate.
+
+```
+src/
+  app/
+    layout.tsx          # Root layout: fonts, GTM, Header, Footer
+    page.tsx            # Homepage — composes section components
+    globals.css         # Tailwind directives + CSS variables only
+    (routes)/           # All other pages as route folders
+  components/
+    layout/
+      Header.tsx        # Sticky nav
+      Footer.tsx        # Site footer
+    sections/           # Full-width homepage sections (one file per section)
+      Hero.tsx
+      LifestyleCategories.tsx
+      Bestsellers.tsx
+      TrustBar.tsx
+      Testimonials.tsx
+      EmailCapture.tsx
+      UGCFeed.tsx
+    ui/                 # Reusable atomic components
+      ProductCard.tsx
+      Button.tsx
+      StarRating.tsx
+      Badge.tsx
+      SectionHeader.tsx
+  lib/
+    analytics.ts        # trackEvent() wrapper for GA4/Meta/TikTok
+    types.ts            # Shared TypeScript interfaces (Product, Category, etc.)
+  styles/
+    tokens.ts           # Design token constants (mirrors tailwind.config.ts)
+public/
+  images/               # All static images
+    hero.jpg
+    lifestyle/          # Work, School, Travel, Gym category images
+    products/           # Product images
+    ugc/                # UGC grid images
+```
+
+---
+
+## DESIGN TOKENS
+
+These are the exact values from the Figma design. Use ONLY these values.
+They are configured in `tailwind.config.ts` as custom theme extensions.
+
+### Colors
+
+| Token            | Hex       | Tailwind Class        | Usage                          |
+|------------------|-----------|-----------------------|--------------------------------|
+| primary          | `#3D4A3D` | `bg-primary`          | Main buttons, header CTA, nav  |
+| accent           | `#264252` | `bg-accent`           | Subscribe button, highlights   |
+| secondary        | `#3C422A` | `bg-secondary`        | Secondary actions              |
+| muted            | `#585C62` | `text-muted`          | Body text, descriptions        |
+| surface          | `#F0F2E9` | `bg-surface`          | Section backgrounds (Bestsellers, UGC) |
+| background       | `#FFFFFF` | `bg-background`       | Default page background        |
+
+Never use hardcoded hex values in components. Always use Tailwind token classes.
+
+### Typography
+
+| Element        | Font         | Weight | Size (desktop) | Tailwind                          |
+|----------------|--------------|--------|----------------|-----------------------------------|
+| H1 / Hero      | Open Sans    | Bold   | 60px           | `font-heading font-bold text-6xl` |
+| H2 / Section   | Open Sans    | Bold   | 48px           | `font-heading font-bold text-5xl` |
+| H3 / Card      | Open Sans    | Bold   | 20px           | `font-heading font-bold text-xl`  |
+| Body / Subtext | Average Sans | Regular| 18px           | `font-body text-lg`               |
+| Small / Label  | Average Sans | Regular| 14px           | `font-body text-sm`               |
+| Price          | Open Sans    | Bold   | 24px           | `font-heading font-bold text-2xl` |
+| Nav Links      | Average Sans | Regular| 16px           | `font-body text-base`             |
+
+Letter spacing: always apply `tracking-tight` (`-0.5px`) to all text.
+
+### Spacing
+
+Use the 8px spacing scale. Always use Tailwind spacing utilities (`p-2` = 8px, `p-4` = 16px, `p-6` = 24px, `p-8` = 32px, etc.). Never use arbitrary pixel values unless there is no Tailwind equivalent.
+
+### Borders & Radius
+
+- Cards: `rounded-lg` (8px)
+- Buttons: `rounded-md` (6px)
+- Avatars/Circles: `rounded-full`
+- Wishlist button: `rounded-full` with shadow
+
+### Shadows
+
+- Cards: `shadow-sm` (`0px 1px 2px rgba(0,0,0,0.05)`)
+- Wishlist button: `shadow-md` (`0px 2px 4px rgba(0,0,0,0.1)`)
+
+---
+
+## COMPONENT PATTERNS
+
+### Buttons
+
+Two variants only:
+
+```tsx
+// Primary (filled)
+<button className="bg-primary text-white font-body text-base rounded-md h-[60px] px-8 tracking-tight hover:opacity-90 transition-opacity">
+  Shop Bestsellers
+</button>
+
+// Secondary (outlined / white fill)
+<button className="bg-white text-primary font-body text-base rounded-md h-[60px] px-8 tracking-tight border border-primary/20 hover:bg-surface transition-colors">
+  Find Your Buhi Quiz
+</button>
+
+// Mobile CTA height
+h-[48px]  // use on mobile, 48px minimum tap target
+```
+
+### Product Card
+
+Always follow this exact structure:
+- White card, `rounded-lg shadow-sm overflow-hidden`
+- Image container: fixed 320px height on desktop, `object-cover`
+- Wishlist button: top-right absolute, `rounded-full bg-white shadow-md`
+- Optional badge (Trending/New): top-left absolute, small text label
+- Content padding: `p-6`
+- Name: `font-heading font-bold text-xl text-primary tracking-tight`
+- Description: `font-body text-sm text-muted tracking-tight`
+- Price: `font-heading font-bold text-2xl text-primary tracking-tight`
+- Star rating: inline next to review count
+- Add to Cart button: full-width, `bg-primary text-white h-12 rounded-md`
+
+### Section Headers
+
+Reuse `<SectionHeader>` component:
+```tsx
+<SectionHeader
+  title="Bestsellers"
+  subtitle="Our most-loved bags for every lifestyle"
+/>
+```
+Always centered. Title in `font-heading font-bold text-5xl text-primary`, subtitle in `font-body text-lg text-muted`. 96px top/bottom section padding.
+
+### Section Backgrounds
+
+Alternate between these two backgrounds section by section:
+- White: `bg-background` (Hero, Lifestyle, Testimonials)
+- Sage: `bg-surface` (Bestsellers, UGC)
+- Dark: `bg-primary text-white` (Email Capture, Footer)
+
+---
+
+## LAYOUT RULES
+
+### Header (Desktop)
+- Height: 80px, sticky, `bg-white border-b border-gray-200 z-50`
+- Logo: left, 32px from edge
+- Nav: horizontally centered
+- Right side: search icon → cart icon (with badge) → "Shop Bestsellers" button
+- Nav links: `font-body text-base text-muted tracking-tight`
+
+### Header (Mobile)
+- Height: 72px
+- Hamburger: left
+- Logo: centered
+- Cart + search: right
+- "Shop Bestsellers" button moves into the hamburger menu
+
+### Footer
+- Background: `bg-primary text-white`
+- Layout: 4 columns desktop (Brand | Shop | Support | Company)
+- Brand column: Logo + "Bags built for your everyday adventures" + social icons (Instagram, TikTok, Facebook)
+- Footer bottom bar: copyright left, Google Analytics logo right
+- Mobile: stacked accordion
+
+---
+
+## RESPONSIVE BREAKPOINTS
+
+Always write mobile-first CSS. Use these breakpoints:
+
+| Breakpoint | Min Width | Usage                    |
+|------------|-----------|--------------------------|
+| (default)  | 0px       | Mobile (375px base)      |
+| `sm`       | 640px     | Large mobile             |
+| `md`       | 768px     | Tablet                   |
+| `lg`       | 1024px    | Desktop                  |
+| `xl`       | 1280px    | Wide desktop             |
+| `2xl`      | 1440px    | Full design width        |
+
+### Mobile-Specific Rules
+
+- Hero: stack text above image, `text-4xl` heading, full-height 600px
+- Product grid: 2 columns (`grid-cols-2`)
+- Lifestyle categories: 2×2 grid
+- Navigation: hamburger menu
+- Buttons in hero: stack vertically, full-width
+- Email capture: input and button stack vertically
+- Footer: accordion-style, no columns
+- UGC grid: horizontal scroll (`overflow-x-auto flex gap-4`)
+
+---
+
+## IMAGE RULES
+
+- Always use `next/image` with `alt` text
+- Hero image: `fill` layout with `object-cover`, `priority` prop
+- Product images: `width={384} height={384}` on desktop
+- Lifestyle category images: `fill` with `object-cover`
+- UGC images: square aspect ratio, `object-cover`
+- Add `loading="lazy"` to all non-hero images (next/image handles this by default)
+
+---
+
+## ANALYTICS RULES
+
+All user interactions must fire through `trackEvent()` from `src/lib/analytics.ts`.
+
+Events to track:
+```ts
+trackEvent('product_view', { product_id, name, price })
+trackEvent('add_to_cart', { product_id, name, price })
+trackEvent('email_signup', { source: 'homepage_footer' })
+trackEvent('quiz_start')
+trackEvent('lifestyle_category_click', { category })
+```
+
+`trackEvent` fires to:
+1. `window.gtag` (GA4 via GTM)
+2. `window.fbq` (Meta Pixel)
+3. `window.ttq` (TikTok Pixel)
+
+Never call `window.gtag` / `window.fbq` / `window.ttq` directly in components — always go through `trackEvent`.
+
+---
+
+## TYPESCRIPT RULES
+
+Always define shared types in `src/lib/types.ts`. Key interfaces:
+
+```ts
+interface Product {
+  id: string
+  name: string
+  description: string
+  price: number
+  rating: number
+  reviewCount: number
+  image: string
+  badge?: 'Trending' | 'New' | 'Bestseller'
+  category: 'work' | 'school' | 'travel' | 'gym'
+}
+
+interface LifestyleCategory {
+  id: string
+  name: string
+  description: string
+  image: string
+  href: string
+}
+
+interface Testimonial {
+  id: string
+  name: string
+  title: string
+  quote: string
+  avatar: string
+  rating: number
+}
+```
+
+---
+
+## SEO RULES
+
+Every page must export a `generateMetadata()` function or static `metadata` object from `src/app/[page]/page.tsx`.
+
+Homepage metadata:
+```ts
+export const metadata: Metadata = {
+  title: 'Buhi Supply Co — Bags That Move With Your Life',
+  description: 'Versatile, durable lifestyle bags for work, school, travel, and gym. Shop backpacks, totes, duffels, and more.',
+  openGraph: { ... }
+}
+```
+
+- All images must have `alt` text
+- Use semantic HTML: `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`, `<h1>`–`<h3>`
+- Only one `<h1>` per page (the Hero headline)
+- Section headings use `<h2>`, card titles use `<h3>`
+
+---
+
+## FIGMA REFERENCE
+
+The Figma design file is the source of truth for all visual decisions.
+Key node IDs for reference in Cursor:
+
+| Section                | Node ID  |
+|------------------------|----------|
+| Full Desktop Homepage  | `5:331`  |
+| Full Mobile Homepage   | `7:396`  |
+| Header (Desktop)       | `5:340`  |
+| Hero Section           | `5:334`  |
+| Shop by Lifestyle      | `5:335`  |
+| Bestsellers Grid       | `5:336`  |
+| Testimonials           | `5:337`  |
+| Email Capture          | `5:1345` |
+| #BuhiEverywhere        | `5:339`  |
+| Footer                 | `5:1246` |
+| Mobile Header          | `7:406`  |
+| Mobile Hero            | `7:398`  |
+| Mobile Bestsellers     | `7:400`  |
+
+When implementing any section, reference the corresponding node ID above.
+If the Figma MCP is connected in Cursor, you can call it with:
+`get_design_context(nodeId: "5:334")` to pull the exact code spec.
+
+---
+
+## WHAT TO NEVER DO
+
+- Never use hardcoded hex colors — always use Tailwind token classes
+- Never use plain `<img>` — always `next/image`
+- Never write inline styles unless absolutely unavoidable
+- Never create a new component for something that already exists in `src/components/ui/`
+- Never skip `alt` text on images
+- Never call analytics platforms directly — use `trackEvent()`
+- Never use `px-` values that break the 8px spacing grid
+- Never write CSS outside of Tailwind utilities (no custom CSS files except `globals.css`)
+- Never add new npm packages without asking first
+
+---
+
+## WHAT TO ALWAYS DO
+
+- Always write mobile-first (base styles = mobile, then `md:` / `lg:` for desktop)
+- Always use TypeScript interfaces for component props
+- Always use `next/image` with explicit `width` and `height` or `fill`
+- Always use semantic HTML elements
+- Always run `trackEvent()` on key interactions
+- Always match the Figma design — if unsure, ask for the node ID and pull the spec
+- Always keep components under ~150 lines — split into sub-components if larger
+- Always export a `metadata` object from each page file
