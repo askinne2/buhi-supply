@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { LIFESTYLE_IMAGES } from "@/lib/figma-assets";
@@ -70,15 +69,17 @@ export function LifestyleCategories() {
                 <p className="font-body text-sm text-white/90 tracking-tight line-clamp-2 md:line-clamp-none">
                   {cat.description}
                 </p>
-                <Link
-                  href={cat.href}
-                  onClick={() =>
-                    trackEvent("lifestyle_category_click", { category: cat.id })
-                  }
-                  className="inline-flex items-center justify-center bg-white text-primary font-body text-sm md:text-base rounded-md h-9 md:h-10 w-fit px-4 min-h-[36px] tracking-tight hover:bg-surface transition-colors mt-2"
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    trackEvent("lifestyle_category_click", { category: cat.id });
+                  }}
+                  className="inline-flex items-center justify-center bg-white text-primary font-body text-sm md:text-base rounded-md h-9 md:h-10 w-fit px-4 min-h-[36px] tracking-tight hover:bg-surface transition-colors mt-2 cursor-not-allowed opacity-75"
+                  title="Coming Soon"
                 >
                   Shop {cat.name}
-                </Link>
+                </button>
               </div>
             </div>
           ))}

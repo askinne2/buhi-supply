@@ -6,11 +6,16 @@ import Image from "next/image";
 import { Search, ShoppingCart, Menu, X } from "lucide-react";
 import { LOGO_IMAGE } from "@/lib/figma-assets";
 import { HEADER_NAV_LINKS } from "@/lib/categories";
-import { useCart } from "@/lib/context/CartContext";
+
+const BESTSELLERS_ANCHOR = "#bestsellers";
+
+/** Nav link is "Shop" when href is /shop; only that one is clickable (to #bestsellers). */
+function isShopLink(href: string) {
+  return href === "/shop";
+}
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { itemCount } = useCart();
 
   return (
     <header className="sticky top-0 z-50 h-[72px] md:h-20 bg-white border-b border-gray-200">
@@ -41,34 +46,43 @@ export function Header() {
           />
         </Link>
 
-        {/* Desktop nav - centered */}
+        {/* Desktop nav - centered; only Shop is clickable */}
         <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8">
-          {HEADER_NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              className="font-body text-base text-muted tracking-tight hover:text-primary transition-colors"
-            >
-              {label}
-            </Link>
-          ))}
+          {HEADER_NAV_LINKS.map(({ label, href }) =>
+            isShopLink(href) ? (
+              <Link
+                key={href}
+                href={BESTSELLERS_ANCHOR}
+                className="font-body text-base text-muted tracking-tight hover:text-primary transition-colors"
+              >
+                {label}
+              </Link>
+            ) : (
+              <span
+                key={href}
+                className="font-body text-base text-muted tracking-tight cursor-not-allowed opacity-50"
+                title="Coming Soon"
+              >
+                {label}
+              </span>
+            )
+          )}
         </nav>
 
-        {/* Right: search, cart, CTA */}
+        {/* Right: search, cart (not a link), CTA */}
         <div className="flex items-center gap-2 md:gap-4">
           <button type="button" aria-label="Search" className="p-2">
             <Search className="w-5 h-5 text-muted" />
           </button>
-          <Link href="/cart" aria-label="Cart" className="relative p-2">
-            <ShoppingCart className="w-5 h-5 text-muted" />
-            {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-accent text-white text-xs font-body flex items-center justify-center">
-                {itemCount}
-              </span>
-            )}
-          </Link>
+          <span
+            className="relative p-2 cursor-default"
+            aria-label="Cart (coming soon)"
+            title="Coming Soon"
+          >
+            <ShoppingCart className="w-5 h-5 text-muted opacity-50" />
+          </span>
           <Link
-            href="/shop"
+            href={BESTSELLERS_ANCHOR}
             className="hidden md:inline-flex items-center justify-center bg-primary text-white font-body text-base rounded-md h-12 px-6 tracking-tight hover:opacity-90 transition-opacity"
           >
             Shop Bestsellers
@@ -102,18 +116,28 @@ export function Header() {
             </button>
           </div>
           <nav className="flex flex-col p-6 gap-4">
-            {HEADER_NAV_LINKS.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                className="font-body text-base text-muted tracking-tight py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
+            {HEADER_NAV_LINKS.map(({ label, href }) =>
+              isShopLink(href) ? (
+                <Link
+                  key={href}
+                  href={BESTSELLERS_ANCHOR}
+                  className="font-body text-base text-muted tracking-tight py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {label}
+                </Link>
+              ) : (
+                <span
+                  key={href}
+                  className="font-body text-base text-muted tracking-tight py-2 cursor-not-allowed opacity-50"
+                  title="Coming Soon"
+                >
+                  {label}
+                </span>
+              )
+            )}
             <Link
-              href="/shop"
+              href={BESTSELLERS_ANCHOR}
               className="mt-4 flex items-center justify-center bg-primary text-white font-body text-base rounded-md h-12 px-6 tracking-tight"
               onClick={() => setMobileMenuOpen(false)}
             >

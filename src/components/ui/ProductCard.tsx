@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Heart } from "lucide-react";
 import { StarRating } from "./StarRating";
 import { Badge } from "./Badge";
@@ -45,7 +44,10 @@ export function ProductCard({
 
   return (
     <article className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
-      <Link href={slug ? `/products/${slug}` : "#"} className="block flex flex-col flex-1">
+      <div
+        className="block flex flex-col flex-1 cursor-default"
+        title="Product page coming soon"
+      >
         <div className="relative h-64 md:h-80 w-full bg-surface">
           <Image
             src={image}
@@ -82,7 +84,7 @@ export function ProductCard({
             <StarRating rating={rating} reviewCount={reviewCount} />
           </div>
         </div>
-      </Link>
+      </div>
       <div className="px-6 pb-6">
         <button
           type="button"

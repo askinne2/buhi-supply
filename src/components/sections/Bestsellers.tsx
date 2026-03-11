@@ -4,7 +4,7 @@ import { PRODUCTS } from "@/lib/data/products";
 
 export function Bestsellers() {
   return (
-    <section className="bg-surface py-16 md:py-24">
+    <section id="bestsellers" className="bg-surface py-16 md:py-24 scroll-mt-20">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         <SectionHeader
           title="Bestsellers"

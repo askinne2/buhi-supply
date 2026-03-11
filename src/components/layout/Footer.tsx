@@ -123,12 +123,12 @@ export function Footer() {
           <FooterColumn title="Shop" defaultOpen={false}>
             {SHOP_LINKS.map(({ label, href }) => (
               <li key={href}>
-                <Link
-                  href={href}
-                  className="font-body text-sm text-white/90 tracking-tight hover:text-white"
+                <span
+                  className="font-body text-sm text-white/90 tracking-tight cursor-not-allowed opacity-75"
+                  title="Coming Soon"
                 >
                   {label}
-                </Link>
+                </span>
               </li>
             ))}
           </FooterColumn>
@@ -136,12 +136,12 @@ export function Footer() {
           <FooterColumn title="Support" defaultOpen={false}>
             {SUPPORT_LINKS.map(({ label, href }) => (
               <li key={href}>
-                <Link
-                  href={href}
-                  className="font-body text-sm text-white/90 tracking-tight hover:text-white"
+                <span
+                  className="font-body text-sm text-white/90 tracking-tight cursor-not-allowed opacity-75"
+                  title="Coming Soon"
                 >
                   {label}
-                </Link>
+                </span>
               </li>
             ))}
           </FooterColumn>
@@ -149,12 +149,12 @@ export function Footer() {
           <FooterColumn title="Company" defaultOpen={false}>
             {COMPANY_LINKS.map(({ label, href }) => (
               <li key={href}>
-                <Link
-                  href={href}
-                  className="font-body text-sm text-white/90 tracking-tight hover:text-white"
+                <span
+                  className="font-body text-sm text-white/90 tracking-tight cursor-not-allowed opacity-75"
+                  title="Coming Soon"
                 >
                   {label}
-                </Link>
+                </span>
               </li>
             ))}
           </FooterColumn>

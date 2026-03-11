@@ -13,7 +13,18 @@ import type { Product } from "@/lib/types";
 
 const STORAGE_KEY = "buhi-cart";
 
-const CartContext = createContext<CartContextType | null>(null);
+/** No-op cart when used without provider (e.g. week-9 submission branch). */
+const defaultCart: CartContextType = {
+  items: [],
+  addItem: () => {},
+  removeItem: () => {},
+  updateQuantity: () => {},
+  clearCart: () => {},
+  itemCount: 0,
+  subtotal: 0,
+};
+
+const CartContext = createContext<CartContextType | null>(defaultCart);
 
 function loadFromStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
@@ -114,8 +125,5 @@ export function CartContextProvider({ children }: { children: React.ReactNode })
 
 export function useCart(): CartContextType {
   const ctx = useContext(CartContext);
-  if (!ctx) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return ctx;
+  return ctx ?? defaultCart;
 }

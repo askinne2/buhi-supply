@@ -1,5 +1,6 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { HERO_IMAGE } from "@/lib/figma-assets";
 
@@ -28,18 +29,20 @@ export function Hero() {
         </p>
         <div className="mt-8 flex flex-col w-full gap-4 sm:flex-row sm:w-auto sm:gap-6">
           <Button
-            href="/shop"
+            href="#bestsellers"
             variant="primary"
             className="h-[60px] w-full rounded-md sm:w-auto"
           >
             Shop Bestsellers
           </Button>
-          <Link
-            href="/quiz"
-            className="inline-flex items-center justify-center bg-white text-primary font-body text-base rounded-md h-[60px] px-6 md:px-8 tracking-tight border border-primary/20 hover:bg-surface transition-colors w-full sm:w-auto"
+          <button
+            type="button"
+            onClick={(e) => e.preventDefault()}
+            className="inline-flex items-center justify-center bg-white text-primary font-body text-base rounded-md h-[60px] px-6 md:px-8 tracking-tight border border-primary/20 hover:bg-surface transition-colors w-full sm:w-auto cursor-not-allowed opacity-75"
+            title="Coming Soon"
           >
             Find Your Buhi Quiz
-          </Link>
+          </button>
         </div>
       </div>
     </section>
