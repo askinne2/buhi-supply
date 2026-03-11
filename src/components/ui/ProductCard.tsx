@@ -23,13 +23,14 @@ export function ProductCard({
   image,
   badge,
   category,
+  categories,
   onAddToCart,
 }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     trackEvent("add_to_cart", { product_id: id, name, price });
-    onAddToCart?.({ id, slug, name, description, price, rating, reviewCount, image, badge, category });
+    onAddToCart?.({ id, slug, name, description, price, rating, reviewCount, image, badge, category, categories });
   };
 
   return (

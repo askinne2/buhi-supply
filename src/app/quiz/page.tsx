@@ -61,8 +61,9 @@ function getRecommendations(answers: {
   carry?: CarryOption;
   priority?: PriorityOption;
 }): typeof PRODUCTS {
-  const byCategory = answers.use
-    ? PRODUCTS.filter((p) => p.categories.includes(answers.use))
+  const use = answers.use;
+  const byCategory = use
+    ? PRODUCTS.filter((p) => p.categories.includes(use))
     : PRODUCTS;
   // Return up to 2; if only one in category, add another from rest
   const first = byCategory.slice(0, 2);
