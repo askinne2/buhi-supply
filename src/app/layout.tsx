@@ -23,6 +23,14 @@ export const metadata: Metadata = {
   title: "Buhi Supply Co — Bags That Move With Your Life",
   description:
     "Versatile, durable lifestyle bags for work, school, travel, and gym. Shop backpacks, totes, duffels, and more.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     title: "Buhi Supply Co — Bags That Move With Your Life",
     description:
